@@ -54,32 +54,32 @@ export const StyleSimulation: React.FC<StyleSimulationProps> = ({
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#0c0a1d]/95 backdrop-blur-md cursor-pointer"
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#0c0a1d]/95 backdrop-blur-md cursor-pointer overflow-y-auto"
       onClick={handleBackdropClick}
     >
-      <div className="relative w-full max-w-2xl cursor-default" onClick={(e) => e.stopPropagation()}>
+      <div className="relative w-full max-w-md cursor-default my-auto" onClick={(e) => e.stopPropagation()}>
         {/* Glow Effect */}
-        <div className="absolute -inset-1 venus-gradient rounded-3xl blur-xl opacity-30"></div>
+        <div className="absolute -inset-1 venus-gradient rounded-2xl blur-xl opacity-30"></div>
 
-        <div className="relative venus-card p-6 md:p-8 rounded-3xl">
+        <div className="relative venus-card p-4 md:p-6 rounded-2xl max-h-[90vh] overflow-y-auto">
           {/* Header */}
-          <div className="flex items-center justify-between mb-6">
-            <h2 className="text-xl md:text-2xl font-display font-semibold venus-gradient-text">
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="text-lg md:text-xl font-display font-semibold venus-gradient-text">
               스타일 시뮬레이션
             </h2>
             <button
               onClick={onClose}
-              className="text-purple-400/60 hover:text-purple-300 transition-colors"
+              className="p-2 rounded-full bg-purple-500/10 text-purple-400/60 hover:text-purple-300 hover:bg-purple-500/20 transition-colors"
             >
-              <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
               </svg>
             </button>
           </div>
 
           {/* Style Advice */}
-          <div className="mb-6 p-4 rounded-xl bg-purple-500/10 border border-purple-500/20">
-            <p className="text-purple-200/80 text-sm">
+          <div className="mb-4 p-3 rounded-lg bg-purple-500/10 border border-purple-500/20">
+            <p className="text-purple-200/80 text-xs">
               <span className="text-purple-400 font-medium">적용 스타일: </span>
               {styleAdvice}
             </p>
@@ -87,32 +87,27 @@ export const StyleSimulation: React.FC<StyleSimulationProps> = ({
 
           {/* Content */}
           {isLoading ? (
-            <div className="flex flex-col items-center justify-center py-16 space-y-6">
-              <div className="relative w-24 h-24">
+            <div className="flex flex-col items-center justify-center py-10 space-y-4">
+              <div className="relative w-16 h-16">
                 <div className="absolute inset-0 rounded-full border-4 border-purple-500/20"></div>
                 <div className="absolute inset-0 rounded-full border-4 border-transparent border-t-purple-400 border-r-pink-400 animate-spin"></div>
-                <div className="absolute inset-4 rounded-full bg-gradient-to-br from-purple-900/50 to-pink-900/50 flex items-center justify-center">
-                  <svg className="w-8 h-8 text-purple-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                  </svg>
-                </div>
               </div>
-              <div className="text-center space-y-2">
-                <p className="text-purple-200 font-medium">스타일 변환 중...</p>
-                <p className="text-purple-300/60 text-sm">AI가 새로운 스타일을 적용하고 있습니다</p>
+              <div className="text-center space-y-1">
+                <p className="text-purple-200 font-medium text-sm">스타일 변환 중...</p>
+                <p className="text-purple-300/60 text-xs">잠시만 기다려주세요</p>
               </div>
             </div>
           ) : error ? (
-            <div className="flex flex-col items-center justify-center py-16 space-y-6">
-              <div className="w-20 h-20 rounded-full bg-pink-500/20 flex items-center justify-center">
-                <svg className="w-10 h-10 text-pink-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <div className="flex flex-col items-center justify-center py-8 space-y-4">
+              <div className="w-12 h-12 rounded-full bg-pink-500/20 flex items-center justify-center">
+                <svg className="w-6 h-6 text-pink-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
                 </svg>
               </div>
-              <div className="text-center space-y-2">
-                <p className="text-pink-400 font-medium">{error}</p>
-                <p className="text-purple-300/60 text-sm">
-                  Gemini의 안전 정책으로 일부 스타일 변환이 제한될 수 있습니다
+              <div className="text-center space-y-1">
+                <p className="text-pink-400 font-medium text-sm">{error}</p>
+                <p className="text-purple-300/60 text-xs">
+                  Gemini 정책으로 일부 변환이 제한될 수 있습니다
                 </p>
               </div>
               <Button variant="outline" onClick={onClose}>
@@ -120,9 +115,9 @@ export const StyleSimulation: React.FC<StyleSimulationProps> = ({
               </Button>
             </div>
           ) : simulatedImage ? (
-            <div className="space-y-6">
+            <div className="space-y-4">
               {/* Image Comparison */}
-              <div className="relative aspect-[4/3] rounded-2xl overflow-hidden">
+              <div className="relative aspect-square rounded-xl overflow-hidden">
                 <img
                   src={showOriginal ? originalImage : simulatedImage}
                   alt={showOriginal ? "원본" : "시뮬레이션"}
@@ -130,8 +125,8 @@ export const StyleSimulation: React.FC<StyleSimulationProps> = ({
                 />
 
                 {/* Toggle Label */}
-                <div className="absolute top-4 left-4 px-3 py-1.5 rounded-full bg-[#0c0a1d]/80 backdrop-blur-sm border border-purple-500/30">
-                  <span className="text-sm font-medium text-purple-200">
+                <div className="absolute top-2 left-2 px-2 py-1 rounded-full bg-[#0c0a1d]/80 backdrop-blur-sm border border-purple-500/30">
+                  <span className="text-xs font-medium text-purple-200">
                     {showOriginal ? "원본" : "After"}
                   </span>
                 </div>
@@ -145,18 +140,17 @@ export const StyleSimulation: React.FC<StyleSimulationProps> = ({
                   onMouseLeave={() => setShowOriginal(false)}
                   onTouchStart={() => setShowOriginal(true)}
                   onTouchEnd={() => setShowOriginal(false)}
-                  className="px-6 py-3 rounded-full bg-purple-500/20 border border-purple-500/30 text-purple-200 font-medium hover:bg-purple-500/30 transition-all flex items-center gap-2"
+                  className="px-4 py-2 rounded-full bg-purple-500/20 border border-purple-500/30 text-purple-200 text-sm font-medium hover:bg-purple-500/30 transition-all flex items-center gap-2"
                 >
-                  <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
                   </svg>
                   꾹 눌러서 원본 보기
                 </button>
               </div>
 
               {/* Action Buttons */}
-              <div className="flex gap-4 justify-center pt-4">
+              <div className="flex gap-3 justify-center">
                 <Button variant="outline" onClick={onClose}>
                   닫기
                 </Button>
@@ -169,10 +163,10 @@ export const StyleSimulation: React.FC<StyleSimulationProps> = ({
                     link.click();
                   }}
                 >
-                  <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
                   </svg>
-                  이미지 저장
+                  저장
                 </Button>
               </div>
             </div>
