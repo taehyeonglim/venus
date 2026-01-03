@@ -129,7 +129,7 @@ export const simulateStyle = async (
 
   try {
     const response = await ai.models.generateContent({
-      model: "gemini-2.5-flash-preview-05-20",
+      model: "gemini-2.0-flash-exp-image-generation",
       contents: [
         {
           parts: [
@@ -144,7 +144,7 @@ export const simulateStyle = async (
         },
       ],
       config: {
-        responseModalities: ["image", "text"],
+        responseModalities: ["IMAGE", "TEXT"],
       }
     });
 
