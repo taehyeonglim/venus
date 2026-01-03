@@ -162,18 +162,26 @@ export const simulateStyle = async (
     throw new Error("이미지 생성에 실패했습니다.");
   } catch (error: any) {
     console.error("Style simulation failed:", error);
+    const errorMsg = error?.message || error?.toString() || '';
 
-    if (error?.message?.includes('API_KEY_INVALID') || error?.status === 400) {
+    if (errorMsg.includes('API_KEY_INVALID') || error?.status === 400) {
       throw new Error("API Key가 유효하지 않습니다.");
     }
-    if (error?.message?.includes('QUOTA_EXCEEDED') || error?.status === 429) {
+    if (errorMsg.includes('QUOTA_EXCEEDED') || error?.status === 429) {
       throw new Error("API 사용량 한도에 도달했습니다.");
     }
-    if (error?.message?.includes('SAFETY') || error?.message?.includes('blocked')) {
+    if (errorMsg.includes('SAFETY') || errorMsg.includes('blocked')) {
       throw new Error("안전 정책으로 인해 이미지 변환이 제한되었습니다. 다른 스타일을 시도해 주세요.");
     }
+    if (errorMsg.includes('not found') || errorMsg.includes('404')) {
+      throw new Error("이미지 생성 모델을 찾을 수 없습니다. 모델명을 확인해주세요.");
+    }
+    if (errorMsg.includes('not supported') || errorMsg.includes('INVALID_ARGUMENT')) {
+      throw new Error("이미지 생성이 지원되지 않는 모델입니다.");
+    }
 
-    throw new Error("스타일 시뮬레이션 중 오류가 발생했습니다. 다시 시도해 주세요.");
+    // Show actual error for debugging
+    throw new Error(`시뮬레이션 오류: ${errorMsg.substring(0, 100)}`);
   }
 };
 
