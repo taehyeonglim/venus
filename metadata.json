@@ -1,0 +1,7 @@
+{
+  "name": "AI Face Insight - Look Analyzer",
+  "description": "A sophisticated AI-powered tool that analyzes facial features from selfies to provide an aesthetic harmony score and personalized style insights.",
+  "requestFramePermissions": [
+    "camera"
+  ]
+}
