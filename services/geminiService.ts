@@ -115,16 +115,20 @@ export const simulateStyle = async (
   const ai = new GoogleGenAI({ apiKey });
 
   const prompt = `
-    Apply this style transformation to the person in the photo:
+    CRITICAL: You must keep the EXACT SAME PERSON's face. Do NOT replace or change the person's identity.
+
+    Task: Apply ONLY the following style changes to this exact person:
     "${styleAdvice}"
 
-    Important guidelines:
-    - Keep the person's identity and core facial features intact
-    - Only modify styling elements like: hairstyle, hair color, makeup, glasses, accessories
-    - Make the transformation look natural and realistic
-    - Do NOT alter bone structure or facial proportions
-    - If the advice mentions clothing colors, you can add/change visible accessories
-    - Maintain the same photo quality and lighting
+    STRICT RULES:
+    1. The person's face, eyes, nose, mouth, skin tone, and facial structure MUST remain EXACTLY the same
+    2. ONLY change: hairstyle, hair color, makeup, glasses, accessories, or clothing colors
+    3. The output image must be recognizable as the SAME PERSON from the input photo
+    4. Do NOT generate a different person or a celebrity lookalike
+    5. Do NOT alter: face shape, eye shape, nose shape, lip shape, skin color, age, or any facial features
+    6. Keep the same photo angle, lighting, and background
+
+    This is a style simulation - the person viewing the result must see THEMSELVES with a new style, not a different person.
   `;
 
   try {
