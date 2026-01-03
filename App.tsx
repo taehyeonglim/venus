@@ -60,8 +60,9 @@ export default function App() {
       {/* Header */}
       <header className="mb-12 text-center">
         <h1 className="text-3xl md:text-5xl font-extrabold font-display bg-gradient-to-r from-indigo-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
-          AI Face Insight
+          Project VENUS
         </h1>
+        <p className="text-sm text-indigo-400 font-medium tracking-widest mt-1">AI FACE ANALYTICS</p>
         <p className="text-slate-400 mt-2 font-medium">당신만의 고유한 매력을 발견해 보세요</p>
       </header>
 
@@ -128,7 +129,7 @@ export default function App() {
 
       {/* Footer */}
       <footer className="mt-20 py-8 border-t border-slate-800 w-full max-w-4xl text-center text-slate-500 text-sm">
-        <p>© 2024 AI Face Insight Project. Powered by Gemini Pro Vision.</p>
+        <p>© 2024 Project VENUS. Powered by Gemini AI.</p>
         <p className="mt-1">프라이버시 보호: 업로드된 이미지는 분석 즉시 삭제됩니다.</p>
       </footer>
     </div>
