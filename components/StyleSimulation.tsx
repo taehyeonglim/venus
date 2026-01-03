@@ -21,6 +21,15 @@ export const StyleSimulation: React.FC<StyleSimulationProps> = ({
   const [error, setError] = useState<string | null>(null);
   const [showOriginal, setShowOriginal] = useState(false);
 
+  // ESC key to close
+  useEffect(() => {
+    const handleEsc = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onClose();
+    };
+    window.addEventListener('keydown', handleEsc);
+    return () => window.removeEventListener('keydown', handleEsc);
+  }, [onClose]);
+
   useEffect(() => {
     const runSimulation = async () => {
       try {
@@ -38,9 +47,17 @@ export const StyleSimulation: React.FC<StyleSimulationProps> = ({
     runSimulation();
   }, [originalImage, styleAdvice, apiKey]);
 
+  // Handle backdrop click
+  const handleBackdropClick = (e: React.MouseEvent) => {
+    if (e.target === e.currentTarget) onClose();
+  };
+
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#0c0a1d]/95 backdrop-blur-md">
-      <div className="relative w-full max-w-2xl">
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#0c0a1d]/95 backdrop-blur-md cursor-pointer"
+      onClick={handleBackdropClick}
+    >
+      <div className="relative w-full max-w-2xl cursor-default" onClick={(e) => e.stopPropagation()}>
         {/* Glow Effect */}
         <div className="absolute -inset-1 venus-gradient rounded-3xl blur-xl opacity-30"></div>
 
