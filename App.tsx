@@ -287,6 +287,7 @@ export default function App() {
             result={result}
             image={capturedImage}
             onRestart={() => setState(AppState.WELCOME)}
+            apiKey={apiKey}
           />
         )}
       </main>
