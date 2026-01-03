@@ -176,3 +176,72 @@ export const simulateStyle = async (
     throw new Error("스타일 시뮬레이션 중 오류가 발생했습니다. 다시 시도해 주세요.");
   }
 };
+
+// Get alternative style suggestion
+export const getAlternativeStyle = async (
+  base64Image: string,
+  currentStyle: string,
+  previousStyles: string[],
+  apiKey: string
+): Promise<string> => {
+  if (!apiKey) {
+    throw new Error("API Key가 설정되지 않았습니다.");
+  }
+
+  const ai = new GoogleGenAI({ apiKey });
+
+  const previousStylesText = previousStyles.length > 0
+    ? `\n\n이전에 제안된 스타일들 (이것들과 다른 새로운 스타일을 제안해주세요):\n${previousStyles.map((s, i) => `${i + 1}. ${s}`).join('\n')}`
+    : '';
+
+  const prompt = `
+    이 얼굴 사진을 분석하고, 현재 스타일 제안과는 완전히 다른 새로운 스타일을 제안해주세요.
+
+    현재 스타일 제안: "${currentStyle}"
+    ${previousStylesText}
+
+    요구사항:
+    - 위의 스타일들과 완전히 다른 새로운 방향의 스타일을 제안
+    - 헤어스타일, 헤어컬러, 메이크업, 안경, 액세서리, 의상 컬러 중 1-2가지에 집중
+    - 이 사람의 얼굴형과 분위기에 어울리는 구체적인 제안
+    - 한국어로 2-3문장으로 작성
+    - 자연스럽고 실현 가능한 스타일로 제안
+  `;
+
+  try {
+    const response = await ai.models.generateContent({
+      model: "gemini-2.0-flash",
+      contents: [
+        {
+          parts: [
+            { text: prompt },
+            {
+              inlineData: {
+                mimeType: "image/jpeg",
+                data: base64Image.split(',')[1] || base64Image,
+              },
+            },
+          ],
+        },
+      ],
+    });
+
+    const result = response.text?.trim();
+    if (!result) {
+      throw new Error("스타일 제안을 생성하지 못했습니다.");
+    }
+
+    return result;
+  } catch (error: any) {
+    console.error("Alternative style generation failed:", error);
+
+    if (error?.message?.includes('API_KEY_INVALID') || error?.status === 400) {
+      throw new Error("API Key가 유효하지 않습니다.");
+    }
+    if (error?.message?.includes('QUOTA_EXCEEDED') || error?.status === 429) {
+      throw new Error("API 사용량 한도에 도달했습니다.");
+    }
+
+    throw new Error("스타일 제안 중 오류가 발생했습니다. 다시 시도해 주세요.");
+  }
+};
