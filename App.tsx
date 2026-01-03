@@ -1,10 +1,13 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { AppState, AnalysisResult } from './types';
 import { CameraView } from './components/CameraView';
 import { ResultDisplay } from './components/ResultDisplay';
+import { ApiKeyModal } from './components/ApiKeyModal';
 import { Button } from './components/ui/Button';
 import { analyzeFace } from './services/geminiService';
+
+const API_KEY_STORAGE_KEY = 'venus_gemini_api_key';
 
 // Venus Symbol Component
 const VenusSymbol = ({ className = "" }: { className?: string }) => (
@@ -28,8 +31,46 @@ export default function App() {
   const [result, setResult] = useState<AnalysisResult | null>(null);
   const [loadingMsg, setLoadingMsg] = useState('이미지 분석 중...');
   const [error, setError] = useState<string | null>(null);
+  const [apiKey, setApiKey] = useState<string>('');
+  const [showApiKeyModal, setShowApiKeyModal] = useState(false);
+
+  // Load API Key from localStorage on mount
+  useEffect(() => {
+    const savedKey = localStorage.getItem(API_KEY_STORAGE_KEY);
+    if (savedKey) {
+      setApiKey(savedKey);
+    }
+  }, []);
+
+  const handleApiKeySubmit = (key: string) => {
+    setApiKey(key);
+    localStorage.setItem(API_KEY_STORAGE_KEY, key);
+    setShowApiKeyModal(false);
+    setError(null);
+  };
+
+  const handleClearApiKey = () => {
+    setApiKey('');
+    localStorage.removeItem(API_KEY_STORAGE_KEY);
+    setShowApiKeyModal(true);
+  };
+
+  const handleStartAnalysis = (mode: 'camera' | 'upload') => {
+    if (!apiKey) {
+      setShowApiKeyModal(true);
+      return;
+    }
+    if (mode === 'camera') {
+      setState(AppState.CAPTURE);
+    }
+  };
 
   const handleCapture = async (image: string) => {
+    if (!apiKey) {
+      setShowApiKeyModal(true);
+      return;
+    }
+
     setCapturedImage(image);
     setState(AppState.ANALYZING);
     setError(null);
@@ -49,11 +90,18 @@ export default function App() {
     }, 2000);
 
     try {
-      const analysis = await analyzeFace(image);
+      const analysis = await analyzeFace(image, apiKey);
       setResult(analysis);
       setState(AppState.RESULT);
     } catch (err: any) {
-      setError(err.message || '분석에 실패했습니다.');
+      const errorMsg = err.message || '분석에 실패했습니다.';
+      setError(errorMsg);
+
+      // If API key error, prompt to re-enter
+      if (errorMsg.includes('API Key')) {
+        setShowApiKeyModal(true);
+      }
+
       setState(AppState.WELCOME);
     } finally {
       clearInterval(interval);
@@ -61,6 +109,11 @@ export default function App() {
   };
 
   const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (!apiKey) {
+      setShowApiKeyModal(true);
+      return;
+    }
+
     const file = e.target.files?.[0];
     if (file) {
       const reader = new FileReader();
@@ -70,6 +123,41 @@ export default function App() {
       reader.readAsDataURL(file);
     }
   };
+
+  // Show API Key modal if no key is set
+  if (!apiKey || showApiKeyModal) {
+    return (
+      <div className="min-h-screen p-4 md:p-8 flex flex-col items-center justify-center">
+        {/* Header */}
+        <header className="mb-12 text-center">
+          <div className="flex items-center justify-center gap-3 mb-2">
+            <VenusSymbol className="w-10 h-10 md:w-12 md:h-12 animate-float" />
+            <h1 className="text-4xl md:text-6xl font-bold font-display text-purple-300 tracking-wide" style={{background: 'linear-gradient(135deg, #c084fc 0%, #e879f9 50%, #f472b6 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent'}}>
+              VENUS
+            </h1>
+          </div>
+          <p className="text-xs md:text-sm text-purple-300/80 font-medium tracking-[0.3em] uppercase">
+            AI Face Analytics
+          </p>
+        </header>
+
+        <main className="w-full max-w-4xl">
+          <ApiKeyModal
+            onSubmit={handleApiKeySubmit}
+            onClose={apiKey ? () => setShowApiKeyModal(false) : undefined}
+            savedKey={apiKey}
+          />
+        </main>
+
+        {/* Footer */}
+        <footer className="mt-16 py-8 text-center">
+          <p className="text-purple-300/30 text-xs">
+            API Key는 브라우저에만 저장되며 서버로 전송되지 않습니다
+          </p>
+        </footer>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen p-4 md:p-8 flex flex-col items-center justify-center">
@@ -118,7 +206,7 @@ export default function App() {
 
                 {/* Buttons */}
                 <div className="flex flex-col sm:flex-row gap-4 justify-center pt-4">
-                  <Button onClick={() => setState(AppState.CAPTURE)} variant="primary" className="sm:w-52">
+                  <Button onClick={() => handleStartAnalysis('camera')} variant="primary" className="sm:w-52">
                     <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
@@ -211,9 +299,20 @@ export default function App() {
             Project VENUS
           </p>
         </div>
-        <p className="text-purple-300/30 text-xs">
+        <p className="text-purple-300/30 text-xs mb-3">
           Powered by Gemini AI · 업로드된 이미지는 분석 즉시 삭제됩니다
         </p>
+        {/* API Key Settings Button */}
+        <button
+          onClick={() => setShowApiKeyModal(true)}
+          className="text-purple-400/50 hover:text-purple-300 text-xs transition-colors inline-flex items-center gap-1"
+        >
+          <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+          </svg>
+          API Key 설정
+        </button>
       </footer>
     </div>
   );
