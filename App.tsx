@@ -77,7 +77,7 @@ export default function App() {
       <header className="mb-16 text-center">
         <div className="flex items-center justify-center gap-3 mb-2">
           <VenusSymbol className="w-10 h-10 md:w-12 md:h-12 animate-float" />
-          <h1 className="text-4xl md:text-6xl font-bold font-display venus-gradient-text venus-glow tracking-wide">
+          <h1 className="text-4xl md:text-6xl font-bold font-display text-purple-300 tracking-wide" style={{background: 'linear-gradient(135deg, #c084fc 0%, #e879f9 50%, #f472b6 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent'}}>
             VENUS
           </h1>
         </div>
