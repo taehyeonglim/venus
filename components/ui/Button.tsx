@@ -16,10 +16,10 @@ export const Button: React.FC<ButtonProps> = ({
   const baseStyles = "px-6 py-3.5 rounded-full font-medium transition-all duration-300 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2";
 
   const variants = {
-    primary: "venus-btn text-white",
-    secondary: "bg-purple-500/20 hover:bg-purple-500/30 text-purple-200 backdrop-blur-md border border-purple-500/20",
-    outline: "venus-btn-outline text-purple-200",
-    ghost: "bg-transparent hover:bg-white/5 text-purple-300"
+    primary: "venus-btn text-[#0a1a1a]",
+    secondary: "bg-[#FFB7C5]/20 hover:bg-[#FFB7C5]/30 text-[#FFB7C5] backdrop-blur-md border border-[#FFB7C5]/20",
+    outline: "venus-btn-outline text-[#9FE2BF]",
+    ghost: "bg-transparent hover:bg-white/5 text-[#9FE2BF]"
   };
 
   return (

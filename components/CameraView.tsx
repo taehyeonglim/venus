@@ -65,14 +65,14 @@ export const CameraView: React.FC<CameraViewProps> = ({ onCapture, onCancel }) =
         <canvas ref={canvasRef} className="hidden" />
 
         {error && (
-          <div className="absolute inset-0 flex items-center justify-center p-6 text-center bg-[#0c0a1d]/95 backdrop-blur-md">
+          <div className="absolute inset-0 flex items-center justify-center p-6 text-center bg-[#0a1a1a]/95 backdrop-blur-md">
             <div className="space-y-4">
-              <div className="w-16 h-16 mx-auto rounded-full bg-pink-500/20 flex items-center justify-center">
-                <svg className="w-8 h-8 text-pink-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <div className="w-16 h-16 mx-auto rounded-full bg-[#FFB7C5]/20 flex items-center justify-center">
+                <svg className="w-8 h-8 text-[#FFB7C5]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
                 </svg>
               </div>
-              <p className="text-pink-300 font-medium">{error}</p>
+              <p className="text-[#FFB7C5] font-medium">{error}</p>
             </div>
           </div>
         )}
@@ -82,7 +82,7 @@ export const CameraView: React.FC<CameraViewProps> = ({ onCapture, onCancel }) =
           {/* Face Guide */}
           <div className="relative w-64 h-80">
             {/* Gradient Border */}
-            <div className="absolute inset-0 rounded-[120px] p-[2px] bg-gradient-to-br from-purple-400/50 via-pink-400/30 to-purple-400/50">
+            <div className="absolute inset-0 rounded-[120px] p-[2px] bg-gradient-to-br from-[#FFB7C5]/50 via-[#9FE2BF]/30 to-[#FFB7C5]/50">
               <div className="w-full h-full rounded-[118px] bg-transparent"></div>
             </div>
             {/* Corner Accents */}
@@ -90,14 +90,14 @@ export const CameraView: React.FC<CameraViewProps> = ({ onCapture, onCancel }) =
             <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-8 h-1 venus-gradient rounded-full"></div>
           </div>
           {/* Dark Overlay Outside Guide */}
-          <div className="absolute inset-0 bg-[#0c0a1d]/50" style={{
+          <div className="absolute inset-0 bg-[#0a1a1a]/50" style={{
             maskImage: 'radial-gradient(ellipse 128px 160px at center, transparent 100%, black 100%)',
             WebkitMaskImage: 'radial-gradient(ellipse 128px 160px at center, transparent 100%, black 100%)'
           }}></div>
         </div>
 
         {/* Controls */}
-        <div className="absolute bottom-0 inset-x-0 p-6 flex flex-col gap-4 bg-gradient-to-t from-[#0c0a1d]/90 via-[#0c0a1d]/50 to-transparent">
+        <div className="absolute bottom-0 inset-x-0 p-6 flex flex-col gap-4 bg-gradient-to-t from-[#0a1a1a]/90 via-[#0a1a1a]/50 to-transparent">
           <div className="flex justify-center items-center gap-6">
             {/* Cancel Button */}
             <Button variant="ghost" onClick={onCancel} className="!px-4">
@@ -113,7 +113,7 @@ export const CameraView: React.FC<CameraViewProps> = ({ onCapture, onCancel }) =
             >
               {/* Outer Ring */}
               <div className="w-20 h-20 rounded-full p-1 venus-gradient">
-                <div className="w-full h-full rounded-full bg-[#0c0a1d] p-1">
+                <div className="w-full h-full rounded-full bg-[#0a1a1a] p-1">
                   {/* Inner Button */}
                   <div className="w-full h-full rounded-full venus-gradient opacity-80 group-hover:opacity-100 group-active:scale-90 transition-all duration-200 flex items-center justify-center">
                     <div className="w-12 h-12 rounded-full bg-white/90 group-hover:bg-white transition-colors"></div>
@@ -128,7 +128,7 @@ export const CameraView: React.FC<CameraViewProps> = ({ onCapture, onCancel }) =
             <div className="w-14"></div>
           </div>
 
-          <p className="text-center text-purple-200/60 text-sm">
+          <p className="text-center text-[#9FE2BF]/60 text-sm">
             얼굴이 가이드 안에 정면으로 오게 해주세요
           </p>
         </div>

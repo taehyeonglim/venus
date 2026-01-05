@@ -54,7 +54,7 @@ export const StyleSimulation: React.FC<StyleSimulationProps> = ({
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#0c0a1d]/95 backdrop-blur-md cursor-pointer overflow-y-auto"
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#0a1a1a]/95 backdrop-blur-md cursor-pointer overflow-y-auto"
       onClick={handleBackdropClick}
     >
       <div className="relative w-full max-w-md cursor-default my-auto" onClick={(e) => e.stopPropagation()}>
@@ -69,7 +69,7 @@ export const StyleSimulation: React.FC<StyleSimulationProps> = ({
             </h2>
             <button
               onClick={onClose}
-              className="p-2 rounded-full bg-purple-500/10 text-purple-400/60 hover:text-purple-300 hover:bg-purple-500/20 transition-colors"
+              className="p-2 rounded-full bg-[#FFB7C5]/10 text-[#FFB7C5]/60 hover:text-[#9FE2BF] hover:bg-[#FFB7C5]/20 transition-colors"
             >
               <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -78,9 +78,9 @@ export const StyleSimulation: React.FC<StyleSimulationProps> = ({
           </div>
 
           {/* Style Advice */}
-          <div className="mb-4 p-3 rounded-lg bg-purple-500/10 border border-purple-500/20">
-            <p className="text-purple-200/80 text-xs">
-              <span className="text-purple-400 font-medium">적용 스타일: </span>
+          <div className="mb-4 p-3 rounded-lg bg-[#FFB7C5]/10 border border-[#FFB7C5]/20">
+            <p className="text-[#9FE2BF]/80 text-xs">
+              <span className="text-[#FFB7C5] font-medium">적용 스타일: </span>
               {styleAdvice}
             </p>
           </div>
@@ -89,24 +89,24 @@ export const StyleSimulation: React.FC<StyleSimulationProps> = ({
           {isLoading ? (
             <div className="flex flex-col items-center justify-center py-10 space-y-4">
               <div className="relative w-16 h-16">
-                <div className="absolute inset-0 rounded-full border-4 border-purple-500/20"></div>
-                <div className="absolute inset-0 rounded-full border-4 border-transparent border-t-purple-400 border-r-pink-400 animate-spin"></div>
+                <div className="absolute inset-0 rounded-full border-4 border-[#FFB7C5]/20"></div>
+                <div className="absolute inset-0 rounded-full border-4 border-transparent border-t-[#FFB7C5] border-r-[#FFB7C5] animate-spin"></div>
               </div>
               <div className="text-center space-y-1">
-                <p className="text-purple-200 font-medium text-sm">스타일 변환 중...</p>
-                <p className="text-purple-300/60 text-xs">잠시만 기다려주세요</p>
+                <p className="text-[#9FE2BF] font-medium text-sm">스타일 변환 중...</p>
+                <p className="text-[#9FE2BF]/60 text-xs">잠시만 기다려주세요</p>
               </div>
             </div>
           ) : error ? (
             <div className="flex flex-col items-center justify-center py-8 space-y-4">
-              <div className="w-12 h-12 rounded-full bg-pink-500/20 flex items-center justify-center">
-                <svg className="w-6 h-6 text-pink-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <div className="w-12 h-12 rounded-full bg-[#FFB7C5]/20 flex items-center justify-center">
+                <svg className="w-6 h-6 text-[#FFB7C5]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
                 </svg>
               </div>
               <div className="text-center space-y-1">
-                <p className="text-pink-400 font-medium text-sm">{error}</p>
-                <p className="text-purple-300/60 text-xs">
+                <p className="text-[#FFB7C5] font-medium text-sm">{error}</p>
+                <p className="text-[#9FE2BF]/60 text-xs">
                   Gemini 정책으로 일부 변환이 제한될 수 있습니다
                 </p>
               </div>
@@ -125,8 +125,8 @@ export const StyleSimulation: React.FC<StyleSimulationProps> = ({
                 />
 
                 {/* Toggle Label */}
-                <div className="absolute top-2 left-2 px-2 py-1 rounded-full bg-[#0c0a1d]/80 backdrop-blur-sm border border-purple-500/30">
-                  <span className="text-xs font-medium text-purple-200">
+                <div className="absolute top-2 left-2 px-2 py-1 rounded-full bg-[#0a1a1a]/80 backdrop-blur-sm border border-[#FFB7C5]/30">
+                  <span className="text-xs font-medium text-[#9FE2BF]">
                     {showOriginal ? "원본" : "After"}
                   </span>
                 </div>
@@ -140,7 +140,7 @@ export const StyleSimulation: React.FC<StyleSimulationProps> = ({
                   onMouseLeave={() => setShowOriginal(false)}
                   onTouchStart={() => setShowOriginal(true)}
                   onTouchEnd={() => setShowOriginal(false)}
-                  className="px-4 py-2 rounded-full bg-purple-500/20 border border-purple-500/30 text-purple-200 text-sm font-medium hover:bg-purple-500/30 transition-all flex items-center gap-2"
+                  className="px-4 py-2 rounded-full bg-[#FFB7C5]/20 border border-[#FFB7C5]/30 text-[#9FE2BF] text-sm font-medium hover:bg-[#FFB7C5]/30 transition-all flex items-center gap-2"
                 >
                   <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
