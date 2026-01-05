@@ -38,15 +38,15 @@ export const ApiKeyModal: React.FC<ApiKeyModalProps> = ({ onSubmit, onClose, sav
       <div className="relative venus-card p-8 md:p-10 rounded-3xl space-y-6 max-w-md mx-auto">
         {/* Header */}
         <div className="text-center space-y-2">
-          <div className="w-16 h-16 mx-auto rounded-full bg-purple-500/20 flex items-center justify-center mb-4">
-            <svg className="w-8 h-8 text-purple-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <div className="w-16 h-16 mx-auto rounded-full bg-[#FFB7C5]/20 flex items-center justify-center mb-4">
+            <svg className="w-8 h-8 text-[#FFB7C5]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z" />
             </svg>
           </div>
           <h2 className="text-xl md:text-2xl font-display font-semibold text-white">
             API Key 설정
           </h2>
-          <p className="text-purple-200/60 text-sm">
+          <p className="text-[#9FE2BF]/60 text-sm">
             Gemini API Key를 입력하면 얼굴 분석을 시작할 수 있습니다
           </p>
         </div>
@@ -54,7 +54,7 @@ export const ApiKeyModal: React.FC<ApiKeyModalProps> = ({ onSubmit, onClose, sav
         {/* Form */}
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="space-y-2">
-            <label className="block text-sm font-medium text-purple-300/80">
+            <label className="block text-sm font-medium text-[#9FE2BF]/80">
               Gemini API Key
             </label>
             <div className="relative">
@@ -66,12 +66,12 @@ export const ApiKeyModal: React.FC<ApiKeyModalProps> = ({ onSubmit, onClose, sav
                   setError('');
                 }}
                 placeholder="AIza..."
-                className="w-full px-4 py-3 bg-purple-900/30 border border-purple-500/30 rounded-xl text-white placeholder-purple-400/50 focus:outline-none focus:border-purple-400/60 focus:ring-2 focus:ring-purple-500/20 transition-all"
+                className="w-full px-4 py-3 bg-[#0d2626]/50 border border-[#9FE2BF]/30 rounded-xl text-white placeholder-[#9FE2BF]/50 focus:outline-none focus:border-[#9FE2BF]/60 focus:ring-2 focus:ring-[#9FE2BF]/20 transition-all"
               />
               <button
                 type="button"
                 onClick={() => setShowKey(!showKey)}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-purple-400/60 hover:text-purple-300 transition-colors"
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-[#9FE2BF]/60 hover:text-[#9FE2BF] transition-colors"
               >
                 {showKey ? (
                   <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -86,7 +86,7 @@ export const ApiKeyModal: React.FC<ApiKeyModalProps> = ({ onSubmit, onClose, sav
               </button>
             </div>
             {error && (
-              <p className="text-pink-400 text-sm">{error}</p>
+              <p className="text-[#FFB7C5] text-sm">{error}</p>
             )}
           </div>
 
@@ -97,14 +97,14 @@ export const ApiKeyModal: React.FC<ApiKeyModalProps> = ({ onSubmit, onClose, sav
 
         {/* Help Link */}
         <div className="text-center space-y-3 pt-2">
-          <p className="text-purple-300/50 text-xs">
+          <p className="text-[#9FE2BF]/50 text-xs">
             API Key가 없으신가요?
           </p>
           <a
             href="https://aistudio.google.com/apikey"
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 text-purple-400 hover:text-purple-300 text-sm font-medium transition-colors"
+            className="inline-flex items-center gap-2 text-[#FFB7C5] hover:text-[#FFC8D3] text-sm font-medium transition-colors"
           >
             <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
@@ -114,7 +114,7 @@ export const ApiKeyModal: React.FC<ApiKeyModalProps> = ({ onSubmit, onClose, sav
         </div>
 
         {/* Privacy Note */}
-        <p className="text-center text-purple-300/30 text-xs">
+        <p className="text-center text-[#9FE2BF]/30 text-xs">
           API Key는 브라우저에만 저장되며 서버로 전송되지 않습니다
         </p>
 
@@ -122,7 +122,7 @@ export const ApiKeyModal: React.FC<ApiKeyModalProps> = ({ onSubmit, onClose, sav
         {onClose && savedKey && (
           <button
             onClick={onClose}
-            className="absolute top-4 right-4 text-purple-400/60 hover:text-purple-300 transition-colors"
+            className="absolute top-4 right-4 text-[#FFB7C5]/60 hover:text-[#FFB7C5] transition-colors"
           >
             <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />

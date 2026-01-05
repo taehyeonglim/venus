@@ -9,19 +9,13 @@ import { analyzeFace } from './services/geminiService';
 
 const API_KEY_STORAGE_KEY = 'venus_gemini_api_key';
 
-// Venus Symbol Component
-const VenusSymbol = ({ className = "" }: { className?: string }) => (
-  <svg viewBox="0 0 100 100" className={className} fill="none">
-    <defs>
-      <linearGradient id="venusGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-        <stop offset="0%" stopColor="#c084fc" />
-        <stop offset="50%" stopColor="#e879f9" />
-        <stop offset="100%" stopColor="#f472b6" />
-      </linearGradient>
-    </defs>
-    <circle cx="50" cy="36" r="28" stroke="url(#venusGrad)" strokeWidth="6" />
-    <line x1="50" y1="64" x2="50" y2="92" stroke="url(#venusGrad)" strokeWidth="6" strokeLinecap="round" />
-    <line x1="36" y1="78" x2="64" y2="78" stroke="url(#venusGrad)" strokeWidth="6" strokeLinecap="round" />
+// Venus Pearl Mirror Logo Component
+const VenusLogo = ({ className = "" }: { className?: string }) => (
+  <svg viewBox="0 0 100 100" className={className}>
+    <path d="M20 70 Q10 20 50 10 Q90 20 80 70" fill="none" stroke="#FFB7C5" strokeWidth="3"/>
+    <path d="M20 70 L50 80 L80 70" fill="none" stroke="#FFB7C5" strokeWidth="3"/>
+    <path d="M50 80 V10 M35 75 L50 10 L65 75" fill="none" stroke="#FFB7C5" strokeWidth="1"/>
+    <circle cx="50" cy="65" r="10" fill="#9FE2BF" stroke="#fff" strokeWidth="2"/>
   </svg>
 );
 
@@ -29,7 +23,7 @@ export default function App() {
   const [state, setState] = useState<AppState>(AppState.WELCOME);
   const [capturedImage, setCapturedImage] = useState<string | null>(null);
   const [result, setResult] = useState<AnalysisResult | null>(null);
-  const [loadingMsg, setLoadingMsg] = useState('이미지 분석 중...');
+  const [loadingMsg, setLoadingMsg] = useState('...');
   const [error, setError] = useState<string | null>(null);
   const [apiKey, setApiKey] = useState<string>('');
   const [showApiKeyModal, setShowApiKeyModal] = useState(false);
@@ -94,7 +88,7 @@ export default function App() {
       setResult(analysis);
       setState(AppState.RESULT);
     } catch (err: any) {
-      const errorMsg = err.message || '분석에 실패했습니다.';
+      const errorMsg = err.message || '';
       setError(errorMsg);
 
       // If API key error, prompt to re-enter
@@ -124,116 +118,165 @@ export default function App() {
     }
   };
 
+  // Header Component
+  const Header = () => (
+    <header className="w-full py-4 px-6 border-b border-[#FFB7C5]/10 mb-8">
+      <div className="max-w-6xl mx-auto flex items-center gap-3">
+        <VenusLogo className="w-8 h-8" />
+        <h1 className="text-xl font-display font-semibold venus-gradient-text">V.E.N.U.S.</h1>
+        <span className="text-[#9FE2BF]/60 text-xs font-light hidden sm:inline">Visual Enhancement & Next Upgrade Stylist</span>
+      </div>
+    </header>
+  );
+
+  // Footer Component
+  const Footer = () => (
+    <footer className="w-full py-8 px-6 border-t border-[#FFB7C5]/10 mt-auto">
+      <div className="max-w-6xl mx-auto text-center space-y-2">
+        <div className="flex items-center justify-center gap-2">
+          <VenusLogo className="w-5 h-5" />
+          <span className="text-[#FFB7C5]/80 font-display font-semibold">V.E.N.U.S.</span>
+        </div>
+        <p className="text-[#9FE2BF]/60 text-sm italic font-display">
+          Visual Enhancement & Next Upgrade Stylist
+        </p>
+        <p className="text-[#FFB7C5]/40 text-xs">
+          &copy;2025-2026 Taehyeong Lim. All rights reserved.
+        </p>
+        {/* API Key Settings Button */}
+        {apiKey && (
+          <button
+            onClick={() => setShowApiKeyModal(true)}
+            className="text-[#9FE2BF]/50 hover:text-[#9FE2BF] text-xs transition-colors inline-flex items-center gap-1 mt-2"
+          >
+            <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+            </svg>
+            API Key
+          </button>
+        )}
+      </div>
+    </footer>
+  );
+
   // Show API Key modal if no key is set
   if (!apiKey || showApiKeyModal) {
     return (
-      <div className="min-h-screen p-4 md:p-8 flex flex-col items-center justify-center">
-        {/* Header */}
-        <header className="mb-12 text-center">
-          <div className="flex items-center justify-center gap-3 mb-2">
-            <VenusSymbol className="w-10 h-10 md:w-12 md:h-12 animate-float" />
-            <h1 className="text-4xl md:text-6xl font-bold font-display text-purple-300 tracking-wide" style={{background: 'linear-gradient(135deg, #c084fc 0%, #e879f9 50%, #f472b6 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent'}}>
-              VENUS
-            </h1>
-          </div>
-          <p className="text-xs md:text-sm text-purple-300/80 font-medium tracking-[0.3em] uppercase">
-            AI Face Analytics
-          </p>
-        </header>
+      <div className="min-h-screen flex flex-col">
+        <Header />
 
-        <main className="w-full max-w-4xl">
-          <ApiKeyModal
-            onSubmit={handleApiKeySubmit}
-            onClose={apiKey ? () => setShowApiKeyModal(false) : undefined}
-            savedKey={apiKey}
-          />
+        <main className="flex-1 flex flex-col items-center justify-center p-4 md:p-8">
+          {/* Title */}
+          <div className="mb-12 text-center">
+            <div className="flex items-center justify-center gap-3 mb-2">
+              <VenusLogo className="w-10 h-10 md:w-12 md:h-12 animate-float" />
+              <h1 className="text-4xl md:text-6xl font-bold font-display venus-gradient-text tracking-wide">
+                V.E.N.U.S.
+              </h1>
+            </div>
+            <p className="text-xs md:text-sm text-[#9FE2BF]/80 font-medium tracking-[0.3em] uppercase">
+              AI Face Analytics
+            </p>
+          </div>
+
+          <div className="w-full max-w-4xl">
+            <ApiKeyModal
+              onSubmit={handleApiKeySubmit}
+              onClose={apiKey ? () => setShowApiKeyModal(false) : undefined}
+              savedKey={apiKey}
+            />
+          </div>
+
+          <p className="text-[#FFB7C5]/30 text-xs mt-8">
+            API Key
+          </p>
         </main>
 
-        {/* Footer */}
-        <footer className="mt-16 py-8 text-center">
-          <p className="text-purple-300/30 text-xs">
-            API Key는 브라우저에만 저장되며 서버로 전송되지 않습니다
-          </p>
-        </footer>
+        <Footer />
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen p-4 md:p-8 flex flex-col items-center justify-center">
-      {/* Header */}
-      <header className="mb-16 text-center">
-        <div className="flex items-center justify-center gap-3 mb-2">
-          <VenusSymbol className="w-10 h-10 md:w-12 md:h-12 animate-float" />
-          <h1 className="text-4xl md:text-6xl font-bold font-display text-purple-300 tracking-wide" style={{background: 'linear-gradient(135deg, #c084fc 0%, #e879f9 50%, #f472b6 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent'}}>
-            VENUS
-          </h1>
-        </div>
-        <p className="text-xs md:text-sm text-purple-300/80 font-medium tracking-[0.3em] uppercase">
-          AI Face Analytics
-        </p>
-        <p className="text-purple-200/60 mt-3 font-light text-sm md:text-base">
-          당신만의 고유한 아름다움을 발견하세요
-        </p>
-      </header>
+    <div className="min-h-screen flex flex-col">
+      <Header />
 
-      <main className="w-full max-w-4xl">
+      <main className="flex-1 flex flex-col items-center justify-center p-4 md:p-8">
         {state === AppState.WELCOME && (
-          <div className="text-center space-y-8">
-            <div className="relative group">
-              {/* Glow Effect */}
-              <div className="absolute -inset-1 venus-gradient rounded-3xl blur-xl opacity-20 group-hover:opacity-40 transition duration-700"></div>
-
-              {/* Main Card */}
-              <div className="relative venus-card p-10 md:p-12 rounded-3xl space-y-8">
-                {/* Venus Icon */}
-                <div className="relative mx-auto w-28 h-28">
-                  <div className="absolute inset-0 venus-gradient rounded-full blur-2xl opacity-30 animate-pulse-glow"></div>
-                  <div className="relative w-full h-full rounded-full bg-gradient-to-br from-purple-500/20 to-pink-500/20 flex items-center justify-center venus-border">
-                    <VenusSymbol className="w-14 h-14" />
-                  </div>
-                </div>
-
-                <div className="space-y-3">
-                  <h2 className="text-2xl md:text-3xl font-display font-semibold text-white">
-                    아름다움을 측정하다
-                  </h2>
-                  <p className="text-purple-200/70 max-w-sm mx-auto leading-relaxed">
-                    정면 사진을 촬영하거나 업로드하면<br />
-                    AI가 당신의 매력 포인트를 분석합니다
-                  </p>
-                </div>
-
-                {/* Buttons */}
-                <div className="flex flex-col sm:flex-row gap-4 justify-center pt-4">
-                  <Button onClick={() => handleStartAnalysis('camera')} variant="primary" className="sm:w-52">
-                    <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
-                    </svg>
-                    카메라로 촬영
-                  </Button>
-                  <label className="sm:w-52 venus-btn-outline text-white px-6 py-3.5 rounded-full font-medium cursor-pointer text-center flex items-center justify-center gap-2">
-                    <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                    </svg>
-                    사진 업로드
-                    <input type="file" accept="image/*" className="hidden" onChange={handleFileUpload} />
-                  </label>
-                </div>
-
-                {/* Decorative Elements */}
-                <div className="absolute top-4 right-4 w-20 h-20 bg-purple-500/5 rounded-full blur-2xl"></div>
-                <div className="absolute bottom-4 left-4 w-16 h-16 bg-pink-500/5 rounded-full blur-2xl"></div>
+          <>
+            {/* Title */}
+            <div className="mb-12 text-center">
+              <div className="flex items-center justify-center gap-3 mb-2">
+                <VenusLogo className="w-10 h-10 md:w-12 md:h-12 animate-float" />
+                <h1 className="text-4xl md:text-6xl font-bold font-display venus-gradient-text tracking-wide">
+                  V.E.N.U.S.
+                </h1>
               </div>
+              <p className="text-xs md:text-sm text-[#9FE2BF]/80 font-medium tracking-[0.3em] uppercase">
+                AI Face Analytics
+              </p>
+              <p className="text-[#FFB7C5]/60 mt-3 font-light text-sm md:text-base">
+                당신만의 고유한 아름다움을 발견하세요
+              </p>
             </div>
 
-            {error && (
-              <div className="venus-card px-6 py-4 rounded-2xl border-pink-500/30 inline-block">
-                <p className="text-pink-400 font-medium">{error}</p>
+            <div className="w-full max-w-4xl text-center space-y-8">
+              <div className="relative group">
+                {/* Glow Effect */}
+                <div className="absolute -inset-1 venus-gradient rounded-3xl blur-xl opacity-20 group-hover:opacity-40 transition duration-700"></div>
+
+                {/* Main Card */}
+                <div className="relative venus-card p-10 md:p-12 rounded-3xl space-y-8">
+                  {/* Venus Icon */}
+                  <div className="relative mx-auto w-28 h-28">
+                    <div className="absolute inset-0 venus-gradient rounded-full blur-2xl opacity-30 animate-pulse-glow"></div>
+                    <div className="relative w-full h-full rounded-full bg-gradient-to-br from-[#FFB7C5]/20 to-[#9FE2BF]/20 flex items-center justify-center venus-border">
+                      <VenusLogo className="w-14 h-14" />
+                    </div>
+                  </div>
+
+                  <div className="space-y-3">
+                    <h2 className="text-2xl md:text-3xl font-display font-semibold text-white">
+                      아름다움을 측정하다
+                    </h2>
+                    <p className="text-[#9FE2BF]/70 max-w-sm mx-auto leading-relaxed">
+                      정면 사진을 촬영하거나 업로드하면<br />
+                      AI가 당신의 매력 포인트를 분석합니다
+                    </p>
+                  </div>
+
+                  {/* Buttons */}
+                  <div className="flex flex-col sm:flex-row gap-4 justify-center pt-4">
+                    <Button onClick={() => handleStartAnalysis('camera')} variant="primary" className="sm:w-52">
+                      <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
+                      </svg>
+                      카메라로 촬영
+                    </Button>
+                    <label className="sm:w-52 venus-btn-outline text-white px-6 py-3.5 rounded-full font-medium cursor-pointer text-center flex items-center justify-center gap-2">
+                      <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                      </svg>
+                      사진 업로드
+                      <input type="file" accept="image/*" className="hidden" onChange={handleFileUpload} />
+                    </label>
+                  </div>
+
+                  {/* Decorative Elements */}
+                  <div className="absolute top-4 right-4 w-20 h-20 bg-[#FFB7C5]/5 rounded-full blur-2xl"></div>
+                  <div className="absolute bottom-4 left-4 w-16 h-16 bg-[#9FE2BF]/5 rounded-full blur-2xl"></div>
+                </div>
               </div>
-            )}
-          </div>
+
+              {error && (
+                <div className="venus-card px-6 py-4 rounded-2xl border-[#FFB7C5]/30 inline-block">
+                  <p className="text-[#FFB7C5] font-medium">{error}</p>
+                </div>
+              )}
+            </div>
+          </>
         )}
 
         {state === AppState.CAPTURE && (
@@ -252,12 +295,12 @@ export default function App() {
 
               {/* Spinning Ring */}
               <div className="relative w-36 h-36">
-                <div className="absolute inset-0 rounded-full border-4 border-purple-500/20"></div>
-                <div className="absolute inset-0 rounded-full border-4 border-transparent border-t-purple-400 border-r-pink-400 animate-spin"></div>
+                <div className="absolute inset-0 rounded-full border-4 border-[#FFB7C5]/20"></div>
+                <div className="absolute inset-0 rounded-full border-4 border-transparent border-t-[#FFB7C5] border-r-[#9FE2BF] animate-spin"></div>
 
                 {/* Center Icon */}
-                <div className="absolute inset-4 rounded-full bg-gradient-to-br from-purple-900/50 to-pink-900/50 flex items-center justify-center venus-border">
-                  <VenusSymbol className="w-12 h-12 animate-pulse" />
+                <div className="absolute inset-4 rounded-full bg-gradient-to-br from-[#FFB7C5]/20 to-[#9FE2BF]/20 flex items-center justify-center venus-border">
+                  <VenusLogo className="w-12 h-12 animate-pulse" />
                 </div>
               </div>
             </div>
@@ -266,7 +309,7 @@ export default function App() {
               <h2 className="text-2xl font-display font-semibold venus-gradient-text">
                 {loadingMsg}
               </h2>
-              <p className="text-purple-300/60 text-sm">잠시만 기다려 주세요...</p>
+              <p className="text-[#9FE2BF]/60 text-sm">잠시만 기다려 주세요...</p>
 
               {/* Progress Dots */}
               <div className="flex justify-center gap-2 pt-4">
@@ -292,29 +335,7 @@ export default function App() {
         )}
       </main>
 
-      {/* Footer */}
-      <footer className="mt-20 py-8 border-t border-purple-500/10 w-full max-w-4xl text-center">
-        <div className="flex items-center justify-center gap-2 mb-2">
-          <VenusSymbol className="w-4 h-4 opacity-50" />
-          <p className="text-purple-300/40 text-sm font-light">
-            Project VENUS
-          </p>
-        </div>
-        <p className="text-purple-300/30 text-xs mb-3">
-          Powered by Gemini AI · 업로드된 이미지는 분석 즉시 삭제됩니다
-        </p>
-        {/* API Key Settings Button */}
-        <button
-          onClick={() => setShowApiKeyModal(true)}
-          className="text-purple-400/50 hover:text-purple-300 text-xs transition-colors inline-flex items-center gap-1"
-        >
-          <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-          </svg>
-          API Key 설정
-        </button>
-      </footer>
+      <Footer />
     </div>
   );
 }
