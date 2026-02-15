@@ -37,8 +37,8 @@ export const StyleSimulation: React.FC<StyleSimulationProps> = ({
         setError(null);
         const result = await simulateStyle(originalImage, styleAdvice, apiKey);
         setSimulatedImage(result);
-      } catch (err: any) {
-        setError(err.message || '스타일 시뮬레이션에 실패했습니다.');
+      } catch (err: unknown) {
+        setError(err instanceof Error ? err.message : '스타일 시뮬레이션에 실패했습니다.');
       } finally {
         setIsLoading(false);
       }

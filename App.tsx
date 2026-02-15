@@ -5,18 +5,48 @@ import { CameraView } from './components/CameraView';
 import { ResultDisplay } from './components/ResultDisplay';
 import { ApiKeyModal } from './components/ApiKeyModal';
 import { Button } from './components/ui/Button';
+import { VenusLogo } from './components/ui/VenusLogo';
 import { analyzeFace } from './services/geminiService';
 
 const API_KEY_STORAGE_KEY = 'venus_gemini_api_key';
 
-// Venus Pearl Mirror Logo Component
-const VenusLogo = ({ className = "" }: { className?: string }) => (
-  <svg viewBox="0 0 100 100" className={className}>
-    <path d="M20 70 Q10 20 50 10 Q90 20 80 70" fill="none" stroke="#FFB7C5" strokeWidth="3"/>
-    <path d="M20 70 L50 80 L80 70" fill="none" stroke="#FFB7C5" strokeWidth="3"/>
-    <path d="M50 80 V10 M35 75 L50 10 L65 75" fill="none" stroke="#FFB7C5" strokeWidth="1"/>
-    <circle cx="50" cy="65" r="10" fill="#9FE2BF" stroke="#fff" strokeWidth="2"/>
-  </svg>
+const Header = () => (
+  <header className="w-full py-4 px-6 border-b border-[#FFB7C5]/10 mb-8">
+    <div className="max-w-6xl mx-auto flex items-center gap-3">
+      <VenusLogo className="w-8 h-8" />
+      <h1 className="text-xl font-display font-semibold venus-gradient-text">V.E.N.U.S.</h1>
+      <span className="text-[#9FE2BF]/60 text-xs font-light hidden sm:inline">Visual Enhancement & Next Upgrade Stylist</span>
+    </div>
+  </header>
+);
+
+const Footer = ({ apiKey, onOpenApiKeyModal }: { apiKey: string; onOpenApiKeyModal: () => void }) => (
+  <footer className="w-full py-8 px-6 border-t border-[#FFB7C5]/10 mt-auto">
+    <div className="max-w-6xl mx-auto text-center space-y-2">
+      <div className="flex items-center justify-center gap-2">
+        <VenusLogo className="w-5 h-5" />
+        <span className="text-[#FFB7C5]/80 font-display font-semibold">V.E.N.U.S.</span>
+      </div>
+      <p className="text-[#9FE2BF]/60 text-sm italic font-display">
+        Visual Enhancement & Next Upgrade Stylist
+      </p>
+      <p className="text-[#FFB7C5]/40 text-xs">
+        &copy;2025-2026 Taehyeong Lim. All rights reserved.
+      </p>
+      {apiKey && (
+        <button
+          onClick={onOpenApiKeyModal}
+          className="text-[#9FE2BF]/50 hover:text-[#9FE2BF] text-xs transition-colors inline-flex items-center gap-1 mt-2"
+        >
+          <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+          </svg>
+          API Key
+        </button>
+      )}
+    </div>
+  </footer>
 );
 
 export default function App() {
@@ -43,20 +73,12 @@ export default function App() {
     setError(null);
   };
 
-  const handleClearApiKey = () => {
-    setApiKey('');
-    localStorage.removeItem(API_KEY_STORAGE_KEY);
-    setShowApiKeyModal(true);
-  };
-
-  const handleStartAnalysis = (mode: 'camera' | 'upload') => {
+  const handleStartCamera = () => {
     if (!apiKey) {
       setShowApiKeyModal(true);
       return;
     }
-    if (mode === 'camera') {
-      setState(AppState.CAPTURE);
-    }
+    setState(AppState.CAPTURE);
   };
 
   const handleCapture = async (image: string) => {
@@ -87,11 +109,10 @@ export default function App() {
       const analysis = await analyzeFace(image, apiKey);
       setResult(analysis);
       setState(AppState.RESULT);
-    } catch (err: any) {
-      const errorMsg = err.message || '';
+    } catch (err: unknown) {
+      const errorMsg = err instanceof Error ? err.message : '';
       setError(errorMsg);
 
-      // If API key error, prompt to re-enter
       if (errorMsg.includes('API Key')) {
         setShowApiKeyModal(true);
       }
@@ -117,48 +138,6 @@ export default function App() {
       reader.readAsDataURL(file);
     }
   };
-
-  // Header Component
-  const Header = () => (
-    <header className="w-full py-4 px-6 border-b border-[#FFB7C5]/10 mb-8">
-      <div className="max-w-6xl mx-auto flex items-center gap-3">
-        <VenusLogo className="w-8 h-8" />
-        <h1 className="text-xl font-display font-semibold venus-gradient-text">V.E.N.U.S.</h1>
-        <span className="text-[#9FE2BF]/60 text-xs font-light hidden sm:inline">Visual Enhancement & Next Upgrade Stylist</span>
-      </div>
-    </header>
-  );
-
-  // Footer Component
-  const Footer = () => (
-    <footer className="w-full py-8 px-6 border-t border-[#FFB7C5]/10 mt-auto">
-      <div className="max-w-6xl mx-auto text-center space-y-2">
-        <div className="flex items-center justify-center gap-2">
-          <VenusLogo className="w-5 h-5" />
-          <span className="text-[#FFB7C5]/80 font-display font-semibold">V.E.N.U.S.</span>
-        </div>
-        <p className="text-[#9FE2BF]/60 text-sm italic font-display">
-          Visual Enhancement & Next Upgrade Stylist
-        </p>
-        <p className="text-[#FFB7C5]/40 text-xs">
-          &copy;2025-2026 Taehyeong Lim. All rights reserved.
-        </p>
-        {/* API Key Settings Button */}
-        {apiKey && (
-          <button
-            onClick={() => setShowApiKeyModal(true)}
-            className="text-[#9FE2BF]/50 hover:text-[#9FE2BF] text-xs transition-colors inline-flex items-center gap-1 mt-2"
-          >
-            <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-            </svg>
-            API Key
-          </button>
-        )}
-      </div>
-    </footer>
-  );
 
   // Show API Key modal if no key is set
   if (!apiKey || showApiKeyModal) {
@@ -193,7 +172,7 @@ export default function App() {
           </p>
         </main>
 
-        <Footer />
+        <Footer apiKey={apiKey} onOpenApiKeyModal={() => setShowApiKeyModal(true)} />
       </div>
     );
   }
@@ -248,7 +227,7 @@ export default function App() {
 
                   {/* Buttons */}
                   <div className="flex flex-col sm:flex-row gap-4 justify-center pt-4">
-                    <Button onClick={() => handleStartAnalysis('camera')} variant="primary" className="sm:w-52">
+                    <Button onClick={handleStartCamera} variant="primary" className="sm:w-52">
                       <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
@@ -335,7 +314,7 @@ export default function App() {
         )}
       </main>
 
-      <Footer />
+      <Footer apiKey={apiKey} onOpenApiKeyModal={() => setShowApiKeyModal(true)} />
     </div>
   );
 }

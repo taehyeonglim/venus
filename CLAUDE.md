@@ -1,8 +1,8 @@
-# CLAUDE.md - AI Face Insight 개발 가이드
+# CLAUDE.md - V.E.N.U.S. 개발 가이드
 
 ## 프로젝트 개요
 
-AI Face Insight는 Google AI Studio에서 시작된 얼굴 외모 분석기 앱입니다. Gemini AI를 활용하여 사용자의 얼굴 사진을 분석하고 매력 지수, 닮은 연예인, 스타일 제안 등을 제공합니다.
+V.E.N.U.S. (Visual Enhancement & Next Upgrade Stylist)는 Google AI Studio에서 시작된 AI 얼굴 분석 앱입니다. Gemini AI를 활용하여 사용자의 얼굴 사진을 분석하고 매력 지수, 닮은 연예인, 스타일 제안 및 AI 스타일 시뮬레이션을 제공합니다.
 
 ## 기술 스택
 
@@ -11,9 +11,10 @@ AI Face Insight는 Google AI Studio에서 시작된 얼굴 외모 분석기 앱�
 | 프레임워크 | React 19.2 |
 | 언어 | TypeScript 5.8 |
 | 빌드 도구 | Vite 6.2 |
-| AI API | Google Gemini (`gemini-3-flash-preview`) |
+| AI API | Google Gemini (`gemini-2.0-flash` 분석, `gemini-2.5-flash-image` 이미지 생성) |
 | 스타일링 | Tailwind CSS (CDN) |
 | 차트 | Recharts 3.6 |
+| 배포 | GitHub Pages (`/docs` 빌드 출력) |
 
 ## 프로젝트 구조
 
@@ -24,12 +25,16 @@ venus/
 ├── index.html                 # HTML 템플릿 + Tailwind CDN
 ├── types.ts                   # TypeScript 인터페이스/enum 정의
 ├── components/
+│   ├── ApiKeyModal.tsx        # API Key 입력/관리 모달
 │   ├── CameraView.tsx         # 웹캠 캡처 컴포넌트
 │   ├── ResultDisplay.tsx      # 분석 결과 표시 컴포넌트
+│   ├── StyleSimulation.tsx    # AI 스타일 시뮬레이션 모달
 │   └── ui/
-│       └── Button.tsx         # 재사용 버튼 컴포넌트
+│       ├── Button.tsx         # 재사용 버튼 컴포넌트
+│       └── VenusLogo.tsx      # 공통 로고 SVG 컴포넌트
 ├── services/
-│   └── geminiService.ts       # Gemini API 호출 서비스
+│   └── geminiService.ts       # Gemini API 호출 서비스 (분석/시뮬레이션/스타일 제안)
+├── docs/                      # GitHub Pages 빌드 출력 디렉토리
 ├── package.json
 ├── tsconfig.json
 └── vite.config.ts
@@ -51,13 +56,10 @@ npm run build
 npm run preview
 ```
 
-## 환경 변수 설정
+## API Key 설정
 
-`.env.local` 파일 생성 필요:
-
-```env
-GEMINI_API_KEY=your_gemini_api_key_here
-```
+API Key는 런타임에 사용자가 브라우저에서 직접 입력합니다. `localStorage`에 저장되며 서버로 전송되지 않습니다.
+Google AI Studio에서 무료 발급: https://aistudio.google.com/apikey
 
 ## 앱 상태 흐름
 
@@ -94,10 +96,11 @@ interface AnalysisResult {
 
 ## 개발 시 주의사항
 
-1. **API 키 보안**: `GEMINI_API_KEY`는 절대 커밋하지 않음 (`.gitignore`에 포함됨)
+1. **API 키 보안**: API Key는 클라이언트 `localStorage`에만 저장됨. 서버 전송 없음
 2. **카메라 권한**: HTTPS 또는 localhost에서만 카메라 접근 가능
 3. **이미지 형식**: Base64 JPEG로 변환하여 API 전송
 4. **응답 스키마**: Gemini API는 JSON 스키마를 통해 구조화된 응답 반환
+5. **빌드 출력**: `docs/` 디렉토리에 빌드되어 GitHub Pages로 직접 배포됨
 
 ## 현재 개선 필요 사항
 

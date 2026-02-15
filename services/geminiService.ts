@@ -70,19 +70,30 @@ export const analyzeFace = async (base64Image: string, apiKey: string): Promise<
       }
     });
 
-    const result = JSON.parse(response.text || '{}');
-    return result as AnalysisResult;
-  } catch (error: any) {
+    const text = response.text;
+    if (!text) {
+      throw new Error("AI 응답이 비어있습니다. 다시 시도해 주세요.");
+    }
+    const result = JSON.parse(text) as AnalysisResult;
+    return result;
+  } catch (error: unknown) {
     console.error("Analysis failed:", error);
 
-    // Handle specific API errors
-    if (error?.message?.includes('API_KEY_INVALID') || error?.status === 400) {
+    if (error instanceof SyntaxError) {
+      throw new Error("AI 응답을 파싱할 수 없습니다. 다시 시도해 주세요.");
+    }
+
+    const errorMsg = error instanceof Error ? error.message : '';
+    const errorStatus = (error as { status?: number })?.status;
+
+    if (errorMsg.includes('API_KEY_INVALID') || errorStatus === 400) {
       throw new Error("API Key가 유효하지 않습니다. 올바른 키를 입력해 주세요.");
     }
-    if (error?.message?.includes('QUOTA_EXCEEDED') || error?.status === 429) {
+    if (errorMsg.includes('QUOTA_EXCEEDED') || errorStatus === 429) {
       throw new Error("API 사용량 한도에 도달했습니다. 잠시 후 다시 시도해 주세요.");
     }
 
+    if (errorMsg) throw error;
     throw new Error("얼굴 분석 중 오류가 발생했습니다. 다시 시도해 주세요.");
   }
 };
@@ -164,14 +175,15 @@ export const simulateStyle = async (
     }
 
     throw new Error("이미지 생성에 실패했습니다.");
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("Style simulation failed:", error);
-    const errorMsg = error?.message || error?.toString() || '';
+    const errorMsg = error instanceof Error ? error.message : String(error);
+    const errorStatus = (error as { status?: number })?.status;
 
-    if (errorMsg.includes('API_KEY_INVALID') || error?.status === 400) {
+    if (errorMsg.includes('API_KEY_INVALID') || errorStatus === 400) {
       throw new Error("API Key가 유효하지 않습니다.");
     }
-    if (errorMsg.includes('QUOTA_EXCEEDED') || error?.status === 429) {
+    if (errorMsg.includes('QUOTA_EXCEEDED') || errorStatus === 429) {
       throw new Error("API 사용량 한도에 도달했습니다.");
     }
     if (errorMsg.includes('SAFETY') || errorMsg.includes('blocked')) {
@@ -184,7 +196,6 @@ export const simulateStyle = async (
       throw new Error("이미지 생성이 지원되지 않는 모델입니다.");
     }
 
-    // Show actual error for debugging
     throw new Error(`시뮬레이션 오류: ${errorMsg.substring(0, 100)}`);
   }
 };
@@ -244,13 +255,16 @@ export const getAlternativeStyle = async (
     }
 
     return result;
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("Alternative style generation failed:", error);
 
-    if (error?.message?.includes('API_KEY_INVALID') || error?.status === 400) {
+    const errorMsg = error instanceof Error ? error.message : '';
+    const errorStatus = (error as { status?: number })?.status;
+
+    if (errorMsg.includes('API_KEY_INVALID') || errorStatus === 400) {
       throw new Error("API Key가 유효하지 않습니다.");
     }
-    if (error?.message?.includes('QUOTA_EXCEEDED') || error?.status === 429) {
+    if (errorMsg.includes('QUOTA_EXCEEDED') || errorStatus === 429) {
       throw new Error("API 사용량 한도에 도달했습니다.");
     }
 
