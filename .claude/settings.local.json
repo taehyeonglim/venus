@@ -7,7 +7,8 @@
       "Bash(npm install:*)",
       "Bash(git add:*)",
       "Bash(git rm:*)",
-      "Bash(git commit -m \"$\\(cat <<''EOF''\nrefactor: fix camera stream leak, remove dead code, improve type safety\n\n- Fix CameraView stream not being released on unmount \\(useRef + cancelled flag\\)\n- Extract duplicate VenusLogo into shared component \\(components/ui/VenusLogo.tsx\\)\n- Remove dead code: handleClearApiKey, unused process.env defines, unused CSS\n- Move Header/Footer outside App function to prevent re-creation on render\n- Replace all catch\\(err: any\\) with catch\\(err: unknown\\) + proper narrowing\n- Add JSON.parse error handling in geminiService\n- Enable strict mode in tsconfig, add include/exclude, remove unused options\n- Add @types/react and @types/react-dom devDependencies\n- Sync CLAUDE.md with actual codebase \\(models, structure, API key flow\\)\n\nCo-Authored-By: Claude Opus 4.6 <noreply@anthropic.com>\nEOF\n\\)\")"
+      "Bash(git commit -m \"$\\(cat <<''EOF''\nrefactor: fix camera stream leak, remove dead code, improve type safety\n\n- Fix CameraView stream not being released on unmount \\(useRef + cancelled flag\\)\n- Extract duplicate VenusLogo into shared component \\(components/ui/VenusLogo.tsx\\)\n- Remove dead code: handleClearApiKey, unused process.env defines, unused CSS\n- Move Header/Footer outside App function to prevent re-creation on render\n- Replace all catch\\(err: any\\) with catch\\(err: unknown\\) + proper narrowing\n- Add JSON.parse error handling in geminiService\n- Enable strict mode in tsconfig, add include/exclude, remove unused options\n- Add @types/react and @types/react-dom devDependencies\n- Sync CLAUDE.md with actual codebase \\(models, structure, API key flow\\)\n\nCo-Authored-By: Claude Opus 4.6 <noreply@anthropic.com>\nEOF\n\\)\")",
+      "Bash(git commit:*)"
     ]
   }
 }
