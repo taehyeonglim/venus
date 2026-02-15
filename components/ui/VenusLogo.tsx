@@ -1,6 +1,3 @@
-
-import React from 'react';
-
 export const VenusLogo = ({ className = "" }: { className?: string }) => (
   <svg viewBox="0 0 100 100" className={className}>
     <path d="M20 70 Q10 20 50 10 Q90 20 80 70" fill="none" stroke="#FFB7C5" strokeWidth="3"/>

@@ -11,6 +11,13 @@ export default defineConfig(() => {
       },
       build: {
         outDir: 'docs',  // GitHub Pages serves from /docs
+        rollupOptions: {
+          output: {
+            manualChunks: {
+              recharts: ['recharts'],
+            },
+          },
+        },
       },
       plugins: [react()],
       resolve: {

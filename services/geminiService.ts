@@ -98,21 +98,6 @@ export const analyzeFace = async (base64Image: string, apiKey: string): Promise<
   }
 };
 
-// API Key validation helper
-export const validateApiKey = async (apiKey: string): Promise<boolean> => {
-  try {
-    const ai = new GoogleGenAI({ apiKey });
-    // Simple test call
-    await ai.models.generateContent({
-      model: "gemini-2.0-flash",
-      contents: [{ parts: [{ text: "Hi" }] }],
-    });
-    return true;
-  } catch {
-    return false;
-  }
-};
-
 // Style simulation using Gemini image generation
 export const simulateStyle = async (
   base64Image: string,
